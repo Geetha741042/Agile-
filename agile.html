@@ -1,0 +1,2190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps Deployment Pipeline</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+body{
+    font-family:Arial, sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+    line-height:1.6;
+}
+a{
+    text-decoration:none;
+    color:inherit;
+}
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:70px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 7%;
+
+    background:#08111f;
+    color:white;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#4cc9f0;
+}
+
+.navbar nav{
+    display:flex;
+    gap:25px;
+}
+
+.navbar nav a{
+    color:#dce7f8;
+    font-size:14px;
+    transition:.3s;
+}
+
+.navbar nav a:hover{
+    color:#4cc9f0;
+}
+
+.menu{
+    display:none;
+    background:none;
+    border:none;
+    color:white;
+    font-size:25px;
+}
+.hero{
+
+    min-height:650px;
+
+    display:flex;
+    align-items:center;
+
+    background:
+    radial-gradient(
+        circle at 80% 30%,
+        #24548c,
+        transparent 35%
+    ),
+    linear-gradient(
+        135deg,
+        #08111f,
+        #162f53
+    );
+
+    color:white;
+}
+
+.hero-content{
+    width:86%;
+    max-width:1100px;
+    margin:auto;
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:8px 16px;
+
+    border:1px solid #4cc9f0;
+
+    border-radius:30px;
+
+    color:#4cc9f0;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    font-weight:bold;
+}
+
+.hero h1{
+
+    margin-top:25px;
+
+    font-size:70px;
+
+    line-height:1.05;
+}
+
+.hero h1 span{
+    color:#4cc9f0;
+}
+
+.hero p{
+
+    max-width:700px;
+
+    margin-top:25px;
+
+    color:#c4d1e4;
+
+    font-size:18px;
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:35px;
+}
+
+.btn{
+
+    padding:14px 23px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    transition:.3s;
+}
+
+.primary{
+    background:#4cc9f0;
+    color:#07101d;
+}
+
+.secondary{
+    border:1px solid #66809f;
+    color:white;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+}
+
+
+.section{
+
+    padding:85px 7%;
+}
+
+.dark{
+    background:#0c1729;
+    color:white;
+}
+
+.light{
+    background:#eaf0f7;
+}
+
+.section-title{
+
+    max-width:850px;
+
+    margin:0 auto 50px;
+
+    text-align:center;
+}
+
+.section-title p{
+
+    color:#168bc0;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    letter-spacing:2px;
+}
+
+.section-title h2{
+
+    font-size:38px;
+
+    margin:10px 0;
+}
+
+.section-title span{
+
+    color:#6b7890;
+}
+.cards{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:20px;
+}
+
+.card{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    border:1px solid #dfe6ef;
+
+    transition:.3s;
+}
+.card:hover{
+
+    transform:translateY(-7px);
+
+    box-shadow:
+    0 20px 40px
+    rgba(0,0,0,.08);
+}
+
+.icon{
+
+    font-size:38px;
+}
+
+.card h3{
+
+    margin:15px 0 10px;
+}
+
+.card p{
+
+    color:#6b7890;
+
+    font-size:14px;
+}
+.pipeline{
+
+    max-width:1150px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+}
+
+.pipeline-step{
+
+    width:150px;
+
+    min-height:150px;
+
+    padding:20px;
+
+    text-align:center;
+
+    background:#14243d;
+
+    border:1px solid #294565;
+
+    border-radius:15px;
+
+    transition:.4s;
+}
+
+.pipeline-step:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#4cc9f0;
+}
+
+.number{
+
+    color:#4cc9f0;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+
+.pipeline-step h3{
+
+    margin:12px 0 8px;
+}
+
+.pipeline-step p{
+
+    color:#9eb0c9;
+
+    font-size:13px;
+}
+
+.arrow{
+
+    color:#4cc9f0;
+
+    font-size:30px;
+}
+.workflow{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:20px;
+}
+
+.workflow-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    border:1px solid #dfe6ef;
+}
+
+.workflow-number{
+
+    width:42px;
+    height:42px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    background:#e2f7ff;
+
+    color:#168bc0;
+
+    border-radius:50%;
+
+    font-weight:bold;
+}
+
+.workflow-card h3{
+
+    margin:18px 0 8px;
+}
+
+.workflow-card p{
+
+    color:#6b7890;
+
+    font-size:14px;
+
+    margin-bottom:15px;
+}
+
+.workflow-card code{
+
+    display:block;
+
+    background:#f0f3f7;
+
+    padding:10px;
+
+    border-radius:6px;
+
+    font-size:11px;
+}
+.terminal{
+
+    max-width:900px;
+
+    margin:40px auto 0;
+
+    background:#07101d;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.terminal-top{
+
+    padding:12px;
+
+    background:#101c2e;
+}
+
+.dot{
+
+    display:inline-block;
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#66809f;
+
+    margin-right:5px;
+}
+
+.terminal pre{
+
+    padding:25px;
+
+    color:#9ff3c6;
+
+    overflow:auto;
+
+    font-size:13px;
+}
+.cicd{
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+.cicd-flow{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+    margin-bottom:40px;
+}
+
+.cicd-flow > span{
+
+    color:#168bc0;
+
+    font-size:25px;
+}
+
+.cicd-box{
+
+    min-width:160px;
+
+    padding:20px;
+
+    background:white;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    border:1px solid #d7e0eb;
+}
+
+.cicd-box strong{
+
+    display:block;
+
+    color:#168bc0;
+
+    font-size:18px;
+}
+
+.cicd-box small{
+
+    color:#6c7890;
+}
+
+.code-window{
+
+    background:#07101d;
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.code-title{
+
+    background:#101c2e;
+
+    color:#d6e2f3;
+
+    padding:13px 20px;
+
+    font-size:13px;
+}
+
+.code-window pre{
+
+    padding:25px;
+
+    color:#bce8ff;
+
+    overflow:auto;
+
+    font-size:13px;
+}
+.cloud-grid{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+.cloud-card{
+
+    padding:35px;
+
+    background:white;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    border:1px solid #dfe6ef;
+}
+
+.cloud-icon{
+
+    font-size:45px;
+}
+
+.cloud-card h3{
+
+    margin:15px 0;
+}
+
+.cloud-card p{
+
+    color:#6b7890;
+
+    font-size:14px;
+}
+
+.deployment{
+
+    max-width:1100px;
+
+    margin:40px auto 0;
+
+    padding:30px;
+
+    background:#0c1729;
+
+    color:white;
+
+    border-radius:15px;
+
+    text-align:center;
+}
+
+.deploy-flow{
+
+    margin-top:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+}
+
+.deploy-flow span{
+
+    padding:10px 15px;
+
+    border:1px solid #35516f;
+
+    border-radius:8px;
+}
+
+.deploy-flow b{
+
+    color:#4cc9f0;
+}
+.monolith{
+
+    max-width:800px;
+
+    margin:auto;
+
+    padding:30px;
+
+    background:#14243d;
+
+    border:2px solid #2d4b6b;
+
+    border-radius:18px;
+
+    text-align:center;
+}
+
+.monolith-title{
+
+    margin-bottom:25px;
+
+    color:#4cc9f0;
+
+    font-weight:bold;
+}
+
+.monolith-content{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+}
+
+.monolith-content div{
+
+    padding:25px 10px;
+
+    background:#203653;
+
+    border-radius:10px;
+
+    font-size:25px;
+}
+
+.monolith-content strong{
+
+    display:block;
+
+    margin-top:10px;
+
+    font-size:13px;
+}
+.migration{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:30px;
+}
+
+.architecture{
+
+    width:420px;
+
+    padding:30px;
+
+    background:white;
+
+    border:1px solid #dfe6ef;
+
+    border-radius:15px;
+
+    text-align:center;
+}
+
+.big-box{
+
+    margin-top:20px;
+
+    padding:40px 20px;
+
+    background:#14243d;
+
+    color:white;
+
+    border-radius:10px;
+}
+
+.migration-arrow{
+
+    font-size:45px;
+
+    color:#168bc0;
+}
+
+.service-box{
+
+    margin-top:20px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+}
+
+.service-box span{
+
+    padding:18px 10px;
+
+    background:#eaf6fb;
+
+    color:#155675;
+
+    border-radius:8px;
+
+    font-size:13px;
+
+    font-weight:bold;
+}
+.advantages{
+
+    max-width:1100px;
+
+    margin:50px auto 0;
+
+    padding:30px;
+
+    background:#f7f9fc;
+
+    border-radius:15px;
+}
+
+.advantages h3{
+
+    margin-bottom:20px;
+}
+
+.advantage-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:15px;
+}
+
+.advantage-grid div{
+
+    padding:18px;
+
+    background:white;
+
+    border-radius:10px;
+}
+
+.advantage-grid p{
+
+    color:#6b7890;
+
+    font-size:13px;
+
+    margin-top:5px;
+}
+.benefits{
+
+    max-width:900px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.benefit{
+
+    background:white;
+
+    padding:18px 22px;
+
+    border-radius:10px;
+
+    border:1px solid #dfe6ef;
+
+    font-weight:bold;
+}
+
+.benefit span{
+
+    color:#12a66a;
+
+    margin-right:10px;
+}
+footer{
+
+    padding:45px;
+
+    background:#07101d;
+
+    color:white;
+
+    text-align:center;
+}
+
+.footer-logo{
+
+    font-size:25px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+}
+
+.footer-logo span{
+
+    color:#4cc9f0;
+}
+
+footer p{
+
+    color:#aab9cd;
+}
+
+.small{
+
+    font-size:12px;
+
+    margin-top:8px;
+}
+@media(max-width:900px){
+
+    .cards,
+    .workflow,
+    .cloud-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .advantage-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .monolith-content{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .migration{
+
+        flex-direction:column;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .navbar nav{
+
+        display:none;
+
+        position:absolute;
+
+        top:70px;
+
+        left:0;
+
+        width:100%;
+
+        padding:20px;
+
+        background:#08111f;
+
+        flex-direction:column;
+    }
+
+    .navbar nav.active{
+
+        display:flex;
+    }
+
+    .menu{
+
+        display:block;
+    }
+
+    .hero h1{
+
+        font-size:45px;
+    }
+
+    .buttons{
+
+        flex-direction:column;
+    }
+
+    .cards,
+    .workflow,
+    .cloud-grid,
+    .benefits,
+    .advantage-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .pipeline-arrow{
+
+        transform:rotate(90deg);
+    }
+
+    .cicd-flow{
+
+        flex-direction:column;
+    }
+
+    .cicd-flow > span{
+
+        transform:rotate(90deg);
+    }
+
+    .monolith-content{
+
+        grid-template-columns:1fr;
+    }
+
+    .architecture{
+
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        DevOps<span>Flow</span>
+    </div>
+
+    <nav id="nav">
+
+        <a href="#home">Home</a>
+
+        <a href="#git">
+            Git & GitHub
+        </a>
+
+        <a href="#cicd">
+            CI/CD
+        </a>
+
+        <a href="#cloud">
+            Cloud
+        </a>
+
+        <a href="#microservices">
+            Microservices
+        </a>
+
+    </nav>
+
+    <button class="menu" onclick="toggleMenu()">
+        ☰
+    </button>
+
+</header>
+
+<section id="home" class="hero">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            DEVOPS DEPLOYMENT PIPELINE
+        </div>
+
+        <h1>
+            Build. Test.
+            <span>Deploy.</span>
+        </h1>
+
+        <p>
+
+            A complete demonstration of DevOps practices
+            using Git, GitHub, GitHub Actions, Cloud Deployment
+            and Microservices Architecture.
+
+        </p>
+
+        <div class="buttons">
+
+            <a href="#pipeline"
+               class="btn primary">
+
+                Explore Pipeline
+
+            </a>
+
+            <a href="#architecture"
+               class="btn secondary">
+
+                View Architecture
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+
+        <p>
+            PROJECT OVERVIEW
+        </p>
+
+        <h2>
+            What Does This Project Demonstrate?
+        </h2>
+
+        <span>
+
+            This project demonstrates how DevOps practices
+            automate software development and deployment.
+
+        </span>
+
+    </div>
+       <div class="cards">
+
+
+        <div class="card">
+
+            <div class="icon">
+                🔀
+            </div>
+
+            <h3>
+                Version Control
+            </h3>
+
+            <p>
+
+                Git manages source-code versions while GitHub
+                provides branches, pull requests and collaboration.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                ⚙️
+            </div>
+
+            <h3>
+                CI/CD Automation
+            </h3>
+
+            <p>
+
+                GitHub Actions automatically builds and tests
+                the application whenever code changes.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                ☁️
+            </div>
+
+            <h3>
+                Cloud Deployment
+            </h3>
+
+            <p>
+
+                The tested application can be deployed
+                automatically to a cloud platform.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🧩
+            </div>
+
+            <h3>
+                Microservices
+            </h3>
+
+            <p>
+
+                A monolithic application can be divided into
+                smaller independently deployable services.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+<section id="pipeline"
+         class="section dark">
+
+    <div class="section-title">
+
+        <p>
+            DEVOPS WORKFLOW
+        </p>
+
+        <h2>
+            End-to-End Deployment Pipeline
+        </h2>
+
+        <span style="color:#9eb0c9">
+
+            Every stage is connected to create
+            an automated software delivery process.
+
+        </span>
+
+    </div>
+
+
+    <div class="pipeline">
+
+
+        <div class="pipeline-step">
+
+            <div class="number">
+                01
+            </div>
+
+            <h3>
+                Code
+            </h3>
+
+            <p>
+                Developer writes application code.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-step">
+
+            <div class="number">
+                02
+            </div>
+
+            <h3>
+                Git
+            </h3>
+
+            <p>
+                Code is committed and version controlled.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-step">
+
+            <div class="number">
+                03
+            </div>
+
+            <h3>
+                GitHub
+            </h3>
+
+            <p>
+                Branch and Pull Request are created.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-step">
+
+            <div class="number">
+                04
+            </div>
+
+            <h3>
+                CI/CD
+            </h3>
+
+            <p>
+                Build and automated tests execute.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-step">
+
+            <div class="number">
+                05
+            </div>
+
+            <h3>
+                Cloud
+            </h3>
+
+            <p>
+                Application is deployed.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+<section id="git"
+         class="section">
+
+    <div class="section-title">
+
+        <p>
+            01 — VERSION CONTROL
+        </p>
+
+        <h2>
+            Git & GitHub Workflow
+        </h2>
+
+        <span>
+
+            Git provides distributed version control and GitHub
+            provides collaboration and repository management.
+
+        </span>
+
+    </div>
+
+
+    <div class="workflow">
+
+
+        <div class="workflow-card">
+
+            <div class="workflow-number">
+                01
+            </div>
+
+            <h3>
+                Create Branch
+            </h3>
+
+            <p>
+                Developers create a separate branch for each feature.
+            </p>
+
+            <code>
+                git checkout -b feature/login
+            </code>
+
+        </div>
+
+
+        <div class="workflow-card">
+
+            <div class="workflow-number">
+                02
+            </div>
+
+            <h3>
+                Commit Changes
+            </h3>
+
+            <p>
+                Changes are saved as meaningful Git commits.
+            </p>
+
+            <code>
+                git commit -m "Add login"
+            </code>
+
+        </div>
+
+
+        <div class="workflow-card">
+
+            <div class="workflow-number">
+                03
+            </div>
+
+            <h3>
+                Push to GitHub
+            </h3>
+
+            <p>
+                The feature branch is uploaded to GitHub.
+            </p>
+
+            <code>
+                git push origin feature/login
+            </code>
+
+        </div>
+
+
+        <div class="workflow-card">
+
+            <div class="workflow-number">
+                04
+            </div>
+
+            <h3>
+                Pull Request
+            </h3>
+
+            <p>
+                Team members review changes before merging.
+            </p>
+
+            <code>
+                Review → Approve → Merge
+            </code>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="terminal">
+
+        <div class="terminal-top">
+
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+
+        </div>
+
+<pre>
+$ git init
+
+$ git add .
+
+$ git commit -m "Initial project"
+
+$ git branch -M main
+
+$ git checkout -b feature/login
+
+$ git push origin feature/login
+
+$ git status
+
+✓ Working tree clean
+</pre>
+
+    </div>
+
+</section>
+<section id="cicd"
+         class="section light">
+
+    <div class="section-title">
+
+        <p>
+            02 — AUTOMATION
+        </p>
+
+        <h2>
+            GitHub Actions CI/CD
+        </h2>
+
+        <span>
+
+            Continuous Integration and Continuous Deployment
+            automate build, test and deployment activities.
+
+        </span>
+
+    </div>
+
+
+    <div class="cicd">
+
+
+        <div class="cicd-flow">
+
+
+            <div class="cicd-box">
+
+                <strong>
+                    Push
+                </strong>
+
+                <small>
+                    Developer pushes code
+                </small>
+
+            </div>
+
+
+            <span>
+                →
+            </span>
+
+
+            <div class="cicd-box">
+
+                <strong>
+                    Build
+                </strong>
+
+                <small>
+                    Application is built
+                </small>
+
+            </div>
+
+
+            <span>
+                →
+            </span>
+
+
+            <div class="cicd-box">
+
+                <strong>
+                    Test
+                </strong>
+
+                <small>
+                    Automated tests run
+                </small>
+
+            </div>
+
+
+            <span>
+                →
+            </span>
+
+
+            <div class="cicd-box">
+
+                <strong>
+                    Deploy
+                </strong>
+
+                <small>
+                    Release to cloud
+                </small>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="code-window">
+
+            <div class="code-title">
+
+                .github/workflows/ci-cd.yml
+
+            </div>
+
+
+<pre>
+name: DevOps CI/CD Pipeline
+
+on:
+
+  push:
+    branches: [ main ]
+
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Build Application
+        run: npm run build
+
+
+  deploy:
+
+    needs: build-test
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy
+        run: echo "Deploying application..."
+</pre>
+
+        </div>
+
+    </div>
+
+</section>
+<section id="cloud"
+         class="section">
+
+    <div class="section-title">
+
+        <p>
+            03 — CLOUD
+        </p>
+
+        <h2>
+            Cloud Deployment
+        </h2>
+
+        <span>
+
+            After CI succeeds, the application can be
+            deployed to a cloud platform.
+
+        </span>
+
+    </div>
+
+
+    <div class="cloud-grid">
+
+
+        <div class="cloud-card">
+
+            <div class="cloud-icon">
+                ☁️
+            </div>
+
+            <h3>
+                Cloud Platform
+            </h3>
+
+            <p>
+
+                Deploy using platforms such as
+                Render, AWS, Azure or another cloud provider.
+
+            </p>
+
+        </div>
+
+
+        <div class="cloud-card">
+
+            <div class="cloud-icon">
+                🔐
+            </div>
+
+            <h3>
+                Environment Secrets
+            </h3>
+
+            <p>
+
+                API keys and deployment tokens are stored
+                securely using GitHub Secrets.
+
+            </p>
+
+        </div>
+
+
+        <div class="cloud-card">
+
+            <div class="cloud-icon">
+                📊
+            </div>
+
+            <h3>
+                Monitoring
+            </h3>
+
+            <p>
+
+                Application health, errors and performance
+                can be monitored after deployment.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="deployment">
+
+        <h3>
+            Deployment Flow
+        </h3>
+
+
+        <div class="deploy-flow">
+
+            <span>
+                GitHub Repository
+            </span>
+
+            <b>→</b>
+
+            <span>
+                GitHub Actions
+            </span>
+
+            <b>→</b>
+
+            <span>
+                Cloud Platform
+            </span>
+
+            <b>→</b>
+
+            <span>
+                Live Website
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+<section class="section dark">
+
+    <div class="section-title">
+
+        <p>
+            04 — CURRENT ARCHITECTURE
+        </p>
+
+        <h2>
+            Monolithic Application
+        </h2>
+
+        <span style="color:#9eb0c9">
+
+            Initially all application components are maintained
+            inside one application.
+
+        </span>
+
+    </div>
+
+
+    <div class="monolith">
+
+        <div class="monolith-title">
+
+            MONOLITHIC APPLICATION
+
+        </div>
+
+
+        <div class="monolith-content">
+
+
+            <div>
+
+                🌐
+
+                <strong>
+                    Web UI
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                👤
+
+                <strong>
+                    User Module
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                🛒
+
+                <strong>
+                    Order Module
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                🗄️
+
+                <strong>
+                    Database
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="microservices"
+         class="section">
+
+    <div class="section-title">
+
+        <p>
+            05 — MODERNIZATION
+        </p>
+
+        <h2>
+            Monolith → Microservices
+        </h2>
+
+        <span>
+
+            The monolithic application can be divided into
+            independent services based on business responsibilities.
+
+        </span>
+
+    </div>
+
+
+    <div class="migration">
+
+
+        <div class="architecture">
+
+            <h3>
+                Monolithic Application
+            </h3>
+
+            <div class="big-box">
+
+                UI + Users + Orders + Database
+
+            </div>
+
+        </div>
+
+
+        <div class="migration-arrow">
+
+            →
+
+        </div>
+
+
+        <div class="architecture">
+
+            <h3>
+                Microservices
+            </h3>
+
+
+            <div class="service-box">
+
+                <span>
+                    🌐 Web UI
+                </span>
+
+                <span>
+                    👤 User Service
+                </span>
+
+                <span>
+                    🛒 Order Service
+                </span>
+
+                <span>
+                    🗄️ Independent Data
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="advantages">
+
+        <h3>
+            Advantages of Microservices
+        </h3>
+
+
+        <div class="advantage-grid">
+
+
+            <div>
+
+                <b>
+                    Independent Deployment
+                </b>
+
+                <p>
+                    Each service can be released independently.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>
+                    Scalability
+                </b>
+
+                <p>
+                    Individual services can be scaled when required.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>
+                    Fault Isolation
+                </b>
+
+                <p>
+                    A failure in one service need not stop every service.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <b>
+                    Maintainability
+                </b>
+
+                <p>
+                    Smaller services are easier to understand and maintain.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section light">
+
+    <div class="section-title">
+
+        <p>
+            DEVOPS BENEFITS
+        </p>
+
+        <h2>
+            Advantages of the Complete Pipeline
+        </h2>
+
+    </div>
+
+
+    <div class="benefits">
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Faster software delivery
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Automated testing
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Fewer manual errors
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Continuous feedback
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Reliable deployments
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Better collaboration
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Easy rollback
+
+        </div>
+
+
+        <div class="benefit">
+
+            <span>✓</span>
+
+            Improved scalability
+
+        </div>
+
+
+    </div>
+
+</section>
+
+<footer>
+
+    <div class="footer-logo">
+
+        DevOps<span>Flow</span>
+
+    </div>
+
+    <p>
+
+        DevOps Deployment Pipeline Demonstration
+
+    </p>
+
+    <p class="small">
+
+        Git • GitHub • GitHub Actions • Cloud • Microservices
+
+    </p>
+
+</footer>
+
+<script>
+
+function toggleMenu(){
+
+    const nav =
+        document.getElementById("nav");
+
+    nav.classList.toggle("active");
+
+}
+
+
+/* Close mobile menu */
+
+document
+.querySelectorAll(".navbar nav a")
+.forEach(link => {
+
+    link.addEventListener(
+        "click",
+        function(){
+
+            document
+            .getElementById("nav")
+            .classList.remove("active");
+
+        }
+    );
+
+});
+
+
+/* Pipeline animation */
+
+const steps =
+document.querySelectorAll(
+    ".pipeline-step"
+);
+
+const observer =
+new IntersectionObserver(
+
+    function(entries){
+
+        entries.forEach(
+            function(entry){
+
+                if(entry.isIntersecting){
+
+                    entry.target.style.opacity =
+                        "1";
+
+                    entry.target.style.transform =
+                        "translateY(0)";
+
+                }
+
+            }
+        );
+
+    },
+
+    {
+        threshold:0.2
+    }
+
+);
+
+
+steps.forEach(
+    function(step){
+
+        step.style.opacity = "0";
+
+        step.style.transform =
+            "translateY(30px)";
+
+        step.style.transition =
+            "all .6s ease";
+
+        observer.observe(step);
+
+    }
+);
+
+
+/* Console message */
+
+console.log(
+    "DevOps Deployment Pipeline Website Loaded Successfully!"
+);
+
+</script>
+
+
+</body>
+</html>
